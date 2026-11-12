@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Diffie-Hellman Key Exchange</title>
+</head>
+
+<body>
+
+    <h2>Diffie-Hellman Key Exchange</h2>
+
+    <label>Prime Number (P):</label>
+    <input type="number" id="p" placeholder="Enter prime number">
+    <br><br>
+
+    <label>Generator (G):</label>
+    <input type="number" id="g" placeholder="Enter generator">
+    <br><br>
+
+    <label>User A Private Key:</label>
+    <input type="number" id="a" placeholder="Enter private key A">
+    <br><br>
+
+    <label>User B Private Key:</label>
+    <input type="number" id="b" placeholder="Enter private key B">
+    <br><br>
+
+    <button onclick="calculate()">Generate Key</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        function powerMod(base, exp, mod) {
+            let result = 1;
+
+            for (let i = 0; i < exp; i++) {
+                result = (result * base) % mod;
+            }
+
+            return result;
+        }
+
+        function calculate() {
+
+            let p = Number(document.getElementById("p").value);
+            let g = Number(document.getElementById("g").value);
+            let a = Number(document.getElementById("a").value);
+            let b = Number(document.getElementById("b").value);
+
+            if (!Number.isSafeInteger(p) ||
+                !Number.isSafeInteger(g) ||
+                !Number.isSafeInteger(a) ||
+                !Number.isSafeInteger(b) ||
+                p < 2 || g < 2 || g >= p ||
+                a < 1 || b < 1) {
+
+                alert("Please enter valid values.");
+                return;
+            }
+
+            let A = powerMod(g, a, p);
+            let B = powerMod(g, b, p);
+
+            let keyA = powerMod(B, a, p);
+            let keyB = powerMod(A, b, p);
+
+            document.getElementById("result").innerHTML =
+                "User A Public Key: " + A + "<br>" +
+                "User B Public Key: " + B + "<br><br>" +
+                "Shared Key of A: " + keyA + "<br>" +
+                "Shared Key of B: " + keyB + "<br><br>" +
+                "Keys Match: " + (keyA === keyB);
+        }
+    </script>
+
+</body>
+
+</html>
